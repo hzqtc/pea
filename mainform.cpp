@@ -38,6 +38,7 @@ void MainForm::resetFmStatus()
     ui.labelAlbum->setText("");
     ui.labelTime->setText("0:00 / 0:00");
     ui.labelCover->setPixmap(NULL);
+    coverUrl = "";
     ui.progressTime->setMaximum(100);
     ui.progressTime->setValue(0);
 }
@@ -89,7 +90,10 @@ void MainForm::updateFmStatus()
                 ui.progressTime->setValue(0);
             }
             ui.labelTime->setText(QString("%1 / %2").arg(presentTime(fm.getPosition())).arg(presentTime(fm.getLength())));
-            coverDownloader.get(QNetworkRequest(QUrl(fm.getCover())));
+            if (coverUrl != fm.getCover()) {
+                coverUrl = fm.getCover();
+                coverDownloader.get(QNetworkRequest(QUrl(coverUrl)));
+            }
             ui.buttonLike->setChecked(fm.isLiked());
             setButtonEnabled(true);
             ui.buttonToggle->setChecked(fm.getState() != FM_PLAYING);

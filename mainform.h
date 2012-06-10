@@ -35,6 +35,7 @@ class MainForm: public QMainWindow
         FM fm;
         QTimer timer;
         QNetworkAccessManager coverDownloader;
+        QString coverUrl;
 };
 
 #endif
