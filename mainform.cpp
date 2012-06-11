@@ -10,6 +10,8 @@ MainForm::MainForm(QWidget *parent): QMainWindow(parent)
             this, SLOT(updateFmStatus()));
     connect(&timer, SIGNAL(timeout()),
             this, SLOT(queryFmStatus()));
+    connect(&tray, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
+            this, SLOT(trayActivated(QSystemTrayIcon::ActivationReason)));
     connect(&coverDownloader, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(displayCover(QNetworkReply*)));
 
@@ -25,6 +27,8 @@ MainForm::MainForm(QWidget *parent): QMainWindow(parent)
             this, SLOT(fmBan()));
 
     timer.start(1000);
+    tray.setIcon(this->windowIcon());
+    tray.show();
 
     fm.connect("localhost", 10098);
     if (fm.isConnected()) {
@@ -66,6 +70,7 @@ void MainForm::updateFmStatus()
 {
     if (!fm.isConnected()) {
         setWindowTitle("Pea - Disconnected");
+        tray.setToolTip(this->windowTitle());
         ui.buttonConnection->setChecked(false);
 
         resetFmStatus();
@@ -75,6 +80,7 @@ void MainForm::updateFmStatus()
     }
 
     setWindowTitle(QString("Pea - %1:%2").arg(fm.getRemoteAddr()).arg(fm.getRemotePort()));
+    tray.setToolTip(this->windowTitle());
     ui.buttonConnection->setChecked(true);
 
     switch (fm.getState()) {
@@ -117,6 +123,13 @@ void MainForm::updateFmStatus()
     }
 }
 
+void MainForm::queryFmStatus()
+{
+    if (fm.isConnected()) {
+        fm.sendCmd("info", false);
+    }
+}
+
 void MainForm::displayCover(QNetworkReply *reply)
 {
     const QByteArray data = reply->readAll();
@@ -130,10 +143,15 @@ void MainForm::displayCover(QNetworkReply *reply)
     reply->deleteLater();
 }
 
-void MainForm::queryFmStatus()
+void MainForm::trayActivated(QSystemTrayIcon::ActivationReason reason)
 {
-    if (fm.isConnected()) {
-        fm.sendCmd("info", false);
+    if (reason == QSystemTrayIcon::DoubleClick) {
+        if (this->isVisible()) {
+            this->hide();
+        }
+        else {
+            this->show();
+        }
     }
 }
 

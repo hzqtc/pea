@@ -7,6 +7,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QTimer>
+#include <QSystemTrayIcon>
 
 class MainForm: public QMainWindow
 {
@@ -20,6 +21,7 @@ class MainForm: public QMainWindow
         void queryFmStatus();
         void displayCover(QNetworkReply *reply);
 
+        void trayActivated(QSystemTrayIcon::ActivationReason reason);
         void connectionToggled(bool checked);
         void likeToggled(bool checked);
         void fmToggled(bool checked);
@@ -34,6 +36,7 @@ class MainForm: public QMainWindow
         Ui::MainForm ui;
         FM fm;
         QTimer timer;
+        QSystemTrayIcon tray;
         QNetworkAccessManager coverDownloader;
         QString coverUrl;
 };
