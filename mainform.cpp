@@ -164,7 +164,10 @@ void MainForm::connectionToggled(bool checked)
         if (ok) {
             QStringList serverInfos = server.split(':');
             QString serverAddr = serverInfos[0];
-            int serverPort = serverInfos[1].toInt();
+            int serverPort = 10098;
+            if (serverInfos.length() > 1) {
+                serverPort = serverInfos[1].toInt();
+            }
             fm.connect(serverAddr, serverPort);
             if (fm.isConnected()) {
                 fm.sendCmd("info", false);
