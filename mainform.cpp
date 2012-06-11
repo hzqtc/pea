@@ -76,6 +76,7 @@ void MainForm::updateFmStatus()
             resetFmStatus();
             setButtonEnabled(false);
             ui.buttonToggle->setEnabled(true);
+            ui.buttonToggle->setChecked(true);
             break;
         case FM_PLAYING:
         case FM_PAUSED:
@@ -125,7 +126,12 @@ void MainForm::connectionToggled(bool checked)
 {
     if (checked) {
         fm.connect("localhost", 10098);
-        fm.sendCmd("info", false);
+        if (fm.isConnected()) {
+            fm.sendCmd("info", false);
+        }
+        else {
+            updateFmStatus();
+        }
     }
     else {
         fm.disconnect();
