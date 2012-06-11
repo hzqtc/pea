@@ -1,5 +1,7 @@
 #include "mainform.h"
 
+#include <QInputDialog>
+
 MainForm::MainForm(QWidget *parent): QMainWindow(parent)
 {
     ui.setupUi(this);
@@ -23,6 +25,14 @@ MainForm::MainForm(QWidget *parent): QMainWindow(parent)
             this, SLOT(fmBan()));
 
     timer.start(1000);
+
+    fm.connect("localhost", 10098);
+    if (fm.isConnected()) {
+        fm.sendCmd("info", false);
+    }
+    else {
+        updateFmStatus();
+    }
 }
 
 QString MainForm::presentTime(int seconds)
@@ -125,9 +135,20 @@ void MainForm::queryFmStatus()
 void MainForm::connectionToggled(bool checked)
 {
     if (checked) {
-        fm.connect("localhost", 10098);
-        if (fm.isConnected()) {
-            fm.sendCmd("info", false);
+        bool ok;
+        QString server = QInputDialog::getText(this, "Connect to FMD", "Server (address:port):",
+                QLineEdit::Normal, "localhost:10098", &ok);
+        if (ok) {
+            QStringList serverInfos = server.split(':');
+            QString serverAddr = serverInfos[0];
+            int serverPort = serverInfos[1].toInt();
+            fm.connect(serverAddr, serverPort);
+            if (fm.isConnected()) {
+                fm.sendCmd("info", false);
+            }
+            else {
+                updateFmStatus();
+            }
         }
         else {
             updateFmStatus();
