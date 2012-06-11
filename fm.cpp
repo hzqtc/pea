@@ -7,7 +7,6 @@ void FM::connect(const QString &host, int port)
     sockMutex.lock();
 
     sock.connectToHost(host, port);
-    sock.waitForConnected(1000);
 
     sockMutex.unlock();
 }
@@ -35,6 +34,7 @@ void FM::sendCmd(const QString &cmd, bool dropResp)
         state = FM_ERROR;
         error = "Fail to conncet to FMD";
         sock.close();
+        sockMutex.unlock();
         return;
     }
 
@@ -43,6 +43,7 @@ void FM::sendCmd(const QString &cmd, bool dropResp)
         state = FM_ERROR;
         error = "Fail to communicate with FMD";
         sock.close();
+        sockMutex.unlock();
         return;
     }
     QByteArray data = sock.readAll();
