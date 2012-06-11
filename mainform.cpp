@@ -1,6 +1,8 @@
 #include "mainform.h"
 
+#include <qjson/parser.h>
 #include <QInputDialog>
+#include <QAction>
 
 MainForm::MainForm(QWidget *parent): QMainWindow(parent)
 {
@@ -14,6 +16,10 @@ MainForm::MainForm(QWidget *parent): QMainWindow(parent)
             this, SLOT(trayActivated(QSystemTrayIcon::ActivationReason)));
     connect(&coverDownloader, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(displayCover(QNetworkReply*)));
+    connect(&channelDownloader, SIGNAL(finished(QNetworkReply*)),
+            this, SLOT(createChannelMenu(QNetworkReply*)));
+    connect(&menuChannels, SIGNAL(triggered(QAction*)),
+            this, SLOT(channelSelected(QAction*)));
 
     connect(ui.buttonConnection, SIGNAL(clicked(bool)),
             this, SLOT(connectionToggled(bool)));
@@ -37,6 +43,31 @@ MainForm::MainForm(QWidget *parent): QMainWindow(parent)
     else {
         updateFmStatus();
     }
+
+    channelDownloader.get(QNetworkRequest(QUrl("http://www.douban.com/j/app/radio/channels")));
+}
+
+void MainForm::createChannelMenu(QNetworkReply *reply)
+{
+    const QByteArray data = reply->readAll();
+
+    QJson::Parser parser;
+    bool ok;
+    QVariantMap result = parser.parse(data, &ok).toMap();
+    QActionGroup *actionGroup = new QActionGroup(this);
+    actionGroup->setExclusive(true);
+    foreach (QVariant chObj, result["channels"].toList()) {
+        QVariantMap channel = chObj.toMap();
+        QAction *action = new QAction(channel["name"].toString(), this);
+        action->setCheckable(true);
+        action->setData(channel["channel_id"]);
+        actionGroup->addAction(action);
+        menuChannels.addAction(action);
+    }
+    ui.buttonChannels->setMenu(&menuChannels);
+    ui.buttonChannels->setPopupMode(QToolButton::InstantPopup);
+
+    reply->deleteLater();
 }
 
 QString MainForm::presentTime(int seconds)
@@ -91,6 +122,7 @@ void MainForm::updateFmStatus()
         case FM_STOPPED:
             resetFmStatus();
             setButtonEnabled(false);
+            ui.buttonChannels->setEnabled(true);
             ui.buttonToggle->setEnabled(true);
             ui.buttonToggle->setChecked(true);
             break;
@@ -119,6 +151,12 @@ void MainForm::updateFmStatus()
             ui.buttonLike->setChecked(fm.isLiked());
             setButtonEnabled(true);
             ui.buttonToggle->setChecked(fm.getState() != FM_PLAYING);
+            foreach (QAction *action, menuChannels.actions()) {
+                if (action->data().toInt() == fm.getChannel()) {
+                    action->setChecked(true);
+                    break;
+                }
+            }
             break;
     }
 }
@@ -214,4 +252,10 @@ void MainForm::fmSkip()
 void MainForm::fmBan()
 {
     fm.sendCmd("ban");
+}
+
+void MainForm::channelSelected(QAction *action)
+{
+    QString cmd = QString("setch %1").arg(action->data().toInt());
+    fm.sendCmd(cmd.toAscii().data());
 }

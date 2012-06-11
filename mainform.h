@@ -8,6 +8,7 @@
 #include <QNetworkReply>
 #include <QTimer>
 #include <QSystemTrayIcon>
+#include <QMenu>
 
 class MainForm: public QMainWindow
 {
@@ -20,6 +21,7 @@ class MainForm: public QMainWindow
         void updateFmStatus();
         void queryFmStatus();
         void displayCover(QNetworkReply *reply);
+        void createChannelMenu(QNetworkReply *reply);
 
         void trayActivated(QSystemTrayIcon::ActivationReason reason);
         void connectionToggled(bool checked);
@@ -27,16 +29,22 @@ class MainForm: public QMainWindow
         void fmToggled(bool checked);
         void fmSkip();
         void fmBan();
+        void channelSelected(QAction *action);
 
     private:
         QString presentTime(int seconds);
         void resetFmStatus();
         void setButtonEnabled(bool enabled);
 
-        Ui::MainForm ui;
         FM fm;
         QTimer timer;
+
+        Ui::MainForm ui;
         QSystemTrayIcon tray;
+
+        QMenu menuChannels;
+        QNetworkAccessManager channelDownloader;
+
         QNetworkAccessManager coverDownloader;
         QString coverUrl;
 };
