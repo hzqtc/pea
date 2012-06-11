@@ -145,6 +145,7 @@ void MainForm::updateFmStatus()
             }
             ui.labelTime->setText(QString("%1 / %2").arg(presentTime(fm.getPosition())).arg(presentTime(fm.getLength())));
             if (coverUrl != fm.getCover()) {
+                ui.labelCover->setPixmap(NULL);
                 coverUrl = fm.getCover();
                 coverDownloader.get(QNetworkRequest(QUrl(coverUrl)));
             }
