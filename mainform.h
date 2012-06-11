@@ -9,6 +9,7 @@
 #include <QTimer>
 #include <QSystemTrayIcon>
 #include <QMenu>
+#include <QCloseEvent>
 
 class MainForm: public QMainWindow
 {
@@ -31,16 +32,21 @@ class MainForm: public QMainWindow
         void fmBan();
         void channelSelected(QAction *action);
 
+    protected:
+        void closeEvent(QCloseEvent *event);
+
     private:
         QString presentTime(int seconds);
         void resetFmStatus();
         void setButtonEnabled(bool enabled);
+        void createTray();
 
         FM fm;
         QTimer timer;
 
         Ui::MainForm ui;
         QSystemTrayIcon tray;
+        QMenu menuTray;
 
         QMenu menuChannels;
         QNetworkAccessManager channelDownloader;

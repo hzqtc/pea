@@ -33,8 +33,8 @@ MainForm::MainForm(QWidget *parent): QMainWindow(parent)
             this, SLOT(fmBan()));
 
     timer.start(1000);
-    tray.setIcon(this->windowIcon());
-    tray.show();
+
+    createTray();
 
     fm.connectToFmd("localhost", 10098);
     if (fm.isConnected()) {
@@ -45,6 +45,13 @@ MainForm::MainForm(QWidget *parent): QMainWindow(parent)
     }
 
     channelDownloader.get(QNetworkRequest(QUrl("http://www.douban.com/j/app/radio/channels")));
+}
+
+void MainForm::createTray()
+{
+    tray.setIcon(this->windowIcon());
+    tray.setContextMenu(&menuTray);
+    tray.show();
 }
 
 void MainForm::createChannelMenu(QNetworkReply *reply)
@@ -171,14 +178,13 @@ void MainForm::queryFmStatus()
 
 void MainForm::displayCover(QNetworkReply *reply)
 {
-    const QByteArray data = reply->readAll();
-
-    QPixmap pixmap;
-    pixmap.loadFromData(data);
-    QPixmap scaledPixmap = pixmap.scaled(ui.labelCover->size(),
-            Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    ui.labelCover->setPixmap(scaledPixmap);
-
+    if (reply->url().toString() == coverUrl) {
+        QPixmap pixmap;
+        pixmap.loadFromData(reply->readAll());
+        QPixmap scaledPixmap = pixmap.scaled(ui.labelCover->size(),
+                Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        ui.labelCover->setPixmap(scaledPixmap);
+    }
     reply->deleteLater();
 }
 
@@ -191,6 +197,9 @@ void MainForm::trayActivated(QSystemTrayIcon::ActivationReason reason)
         else {
             this->show();
         }
+    }
+    else if(reason == QSystemTrayIcon::MiddleClick) {
+        QApplication::exit();
     }
 }
 
@@ -259,4 +268,10 @@ void MainForm::channelSelected(QAction *action)
 {
     QString cmd = QString("setch %1").arg(action->data().toInt());
     fm.sendCmd(cmd.toAscii().data());
+}
+
+void MainForm::closeEvent(QCloseEvent *event)
+{
+    event->ignore();
+    this->hide();
 }
