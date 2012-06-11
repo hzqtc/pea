@@ -36,9 +36,9 @@ MainForm::MainForm(QWidget *parent): QMainWindow(parent)
     tray.setIcon(this->windowIcon());
     tray.show();
 
-    fm.connect("localhost", 10098);
+    fm.connectToFmd("localhost", 10098);
     if (fm.isConnected()) {
-        fm.sendCmd("info", false);
+        fm.sendCmd("info");
     }
     else {
         updateFmStatus();
@@ -164,7 +164,7 @@ void MainForm::updateFmStatus()
 void MainForm::queryFmStatus()
 {
     if (fm.isConnected()) {
-        fm.sendCmd("info", false);
+        fm.sendCmd("info");
     }
 }
 
@@ -206,9 +206,9 @@ void MainForm::connectionToggled(bool checked)
             if (serverInfos.length() > 1) {
                 serverPort = serverInfos[1].toInt();
             }
-            fm.connect(serverAddr, serverPort);
+            fm.connectToFmd(serverAddr, serverPort);
             if (fm.isConnected()) {
-                fm.sendCmd("info", false);
+                fm.sendCmd("info");
             }
             else {
                 updateFmStatus();
@@ -219,7 +219,7 @@ void MainForm::connectionToggled(bool checked)
         }
     }
     else {
-        fm.disconnect();
+        fm.disconnectFromFmd();
         updateFmStatus();
     }
 }

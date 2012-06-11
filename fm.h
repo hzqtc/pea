@@ -15,13 +15,13 @@ class FM: public QObject
     Q_OBJECT
 
     public:
-        FM(QObject *parent = 0): QObject(parent) {}
-        ~FM() { sock.close(); }
+        FM(QObject *parent = 0);
+        ~FM();
         
-        void connect(const QString &host, int port);
-        void disconnect();
+        void connectToFmd(const QString &host, int port);
+        void disconnectFromFmd();
         bool isConnected() const;
-        void sendCmd(const QString &cmd, bool dropResp = true);
+        void sendCmd(const QString &cmd);
 
         QString getRemoteAddr() const { return sock.peerName(); }
         int getRemotePort() const { return sock.peerPort(); }
@@ -42,8 +42,12 @@ class FM: public QObject
     signals:
         void fmdRespond();
 
+    private slots:
+        void readServer();
+
+
     private:
-        void parse(QByteArray data);
+        bool parse(QByteArray data);
 
         QTcpSocket sock;
         QMutex sockMutex;

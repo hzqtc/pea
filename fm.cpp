@@ -2,22 +2,29 @@
 
 #include <qjson/parser.h>
 
-void FM::connect(const QString &host, int port)
+FM::FM(QObject *parent): QObject(parent)
+{
+    connect(&sock, SIGNAL(readyRead()),
+            this, SLOT(readServer()));
+}
+
+FM::~FM()
+{
+    sock.close();
+}
+
+void FM::connectToFmd(const QString &host, int port)
 {
     sockMutex.lock();
-
     sock.connectToHost(host, port);
-
     sockMutex.unlock();
 }
 
-void FM::disconnect()
+void FM::disconnectFromFmd()
 {
     sockMutex.lock();
-
     sock.disconnectFromHost();
     sock.close();
-
     sockMutex.unlock();
 }
 
@@ -26,41 +33,31 @@ bool FM::isConnected() const
     return sock.state() == QAbstractSocket::ConnectedState;
 }
 
-void FM::sendCmd(const QString &cmd, bool dropResp)
+void FM::sendCmd(const QString &cmd)
 {
-    sockMutex.lock();
-
-    if (!isConnected()) {
-        state = FM_ERROR;
-        error = "Fail to conncet to FMD";
-        sock.close();
+    if (isConnected()) {
+        sockMutex.lock();
+        sock.write(cmd.toAscii().data());
         sockMutex.unlock();
-        return;
     }
+}
 
-    sock.write(cmd.toAscii().data());
-    if (!sock.waitForReadyRead(1000)) {
-        state = FM_ERROR;
-        error = "Fail to communicate with FMD";
-        sock.close();
-        sockMutex.unlock();
-        return;
-    }
+void FM::readServer()
+{
     QByteArray data = sock.readAll();
-
-    sockMutex.unlock();
-
-    if (!dropResp) {
-        parse(data);
+    if (parse(data)) {
         emit fmdRespond();
     }
 }
 
-void FM::parse(QByteArray data)
+bool FM::parse(QByteArray data)
 {
     QJson::Parser parser;
     bool ok;
     QVariantMap result = parser.parse(data, &ok).toMap();
+    if (!ok) {
+        return false;
+    }
 
     QString st = result["status"].toString();
     if (st == "play") {
@@ -97,4 +94,5 @@ void FM::parse(QByteArray data)
             channel = result["channel"].toInt();
             break;
     }
+    return true;
 }
