@@ -4,6 +4,7 @@
 #include <QString>
 #include <QTcpSocket>
 #include <QHostAddress>
+#include <QMutex>
 
 enum FmState {
     FM_PLAYING, FM_PAUSED, FM_STOPPED, FM_ERROR
@@ -45,6 +46,7 @@ class FM: public QObject
         void parse(QByteArray data);
 
         QTcpSocket sock;
+        QMutex sockMutex;
 
         FmState state;
         QString error;

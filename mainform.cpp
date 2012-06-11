@@ -136,8 +136,8 @@ void MainForm::connectionToggled(bool checked)
 {
     if (checked) {
         bool ok;
-        QString server = QInputDialog::getText(this, "Connect to FMD", "Server (address:port):",
-                QLineEdit::Normal, "localhost:10098", &ok);
+        QString server = QInputDialog::getText(this, "Connect to FMD",
+                "Server (address:port):", QLineEdit::Normal, "localhost:10098", &ok);
         if (ok) {
             QStringList serverInfos = server.split(':');
             QString serverAddr = serverInfos[0];
