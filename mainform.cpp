@@ -91,7 +91,12 @@ void MainForm::updateFmStatus()
         case FM_PLAYING:
         case FM_PAUSED:
             ui.labelArtist->setText(QString("%1 - %2").arg(fm.getArtist(), fm.getTitle()));
-            ui.labelAlbum->setText(QString("%1 (%2)").arg(fm.getAlbum()).arg(fm.getYear()));
+            if (fm.getYear() > 0) {
+                ui.labelAlbum->setText(QString("%1 (%2)").arg(fm.getAlbum()).arg(fm.getYear()));
+            }
+            else {
+                ui.labelAlbum->setText(QString("%1").arg(fm.getAlbum()));
+            }
             if (fm.getLength() > 0) {
                 ui.progressTime->setMaximum(fm.getLength());
                 ui.progressTime->setValue(fm.getPosition());

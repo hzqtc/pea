@@ -87,7 +87,7 @@ void FM::parse(QByteArray data)
             album = result["album"].toString();
             year = result["year"].toInt();
             cover = result["cover"].toString();
-            url = result["url"].toString();
+            url = "http://music.douban.com" + result["url"].toString();
             like = result["like"].toInt();
             len = result["len"].toInt();
             pos = result["pos"].toInt();
