@@ -44,8 +44,13 @@ void FM::sendCmd(const QString &cmd)
 
 void FM::readServer()
 {
-    QByteArray data = sock.readAll();
-    if (parse(data)) {
+    QString data = QString::fromUtf8(sock.readAll().data());
+    // if there are multiple response received, only process the last response
+    int start = data.lastIndexOf('{');
+    if (start > 0) {
+        data = data.right(start);
+    }
+    if (parse(data.toUtf8())) {
         emit fmdRespond();
     }
 }
