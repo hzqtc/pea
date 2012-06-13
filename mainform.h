@@ -22,7 +22,6 @@ class MainForm: public QMainWindow
         void updateFmStatus();
         void queryFmStatus();
         void displayCover(QNetworkReply *reply);
-        void createChannelMenu(QNetworkReply *reply);
 
         void trayActivated(QSystemTrayIcon::ActivationReason reason);
         void connectionToggled(bool checked);
@@ -30,7 +29,6 @@ class MainForm: public QMainWindow
         void fmToggled(bool checked);
         void fmSkip();
         void fmBan();
-        void channelSelected(QAction *action);
 
     protected:
         void closeEvent(QCloseEvent *event);
@@ -39,7 +37,6 @@ class MainForm: public QMainWindow
         QString presentTime(int seconds);
         void resetFmStatus();
         void setButtonEnabled(bool enabled);
-        void createTray();
 
         FM fm;
         QTimer timer;
@@ -47,9 +44,6 @@ class MainForm: public QMainWindow
         Ui::MainForm ui;
         QSystemTrayIcon tray;
         QMenu menuTray;
-
-        QMenu menuChannels;
-        QNetworkAccessManager channelDownloader;
 
         QNetworkAccessManager coverDownloader;
         QString coverUrl;
