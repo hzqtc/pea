@@ -24,6 +24,7 @@ class MainForm: public QMainWindow
         void displayCover(QNetworkReply *reply);
 
         void trayActivated(QSystemTrayIcon::ActivationReason reason);
+        void openAlbumUrl();
         void connectionToggled(bool checked);
         void likeToggled(bool checked);
         void fmToggled(bool checked);

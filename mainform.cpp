@@ -3,6 +3,7 @@
 #include <qjson/parser.h>
 #include <QInputDialog>
 #include <QAction>
+#include <QDesktopServices>
 
 MainForm::MainForm(QWidget *parent): QMainWindow(parent)
 {
@@ -17,6 +18,8 @@ MainForm::MainForm(QWidget *parent): QMainWindow(parent)
     connect(&coverDownloader, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(displayCover(QNetworkReply*)));
 
+    connect(ui.labelCover, SIGNAL(clicked()),
+            this, SLOT(openAlbumUrl()));
     connect(ui.buttonConnection, SIGNAL(clicked(bool)),
             this, SLOT(connectionToggled(bool)));
     connect(ui.buttonLike, SIGNAL(clicked(bool)),
@@ -162,6 +165,11 @@ void MainForm::trayActivated(QSystemTrayIcon::ActivationReason reason)
     else if(reason == QSystemTrayIcon::MiddleClick) {
         QApplication::exit();
     }
+}
+
+void MainForm::openAlbumUrl()
+{
+    QDesktopServices::openUrl(QUrl(fm.getUrl()));
 }
 
 void MainForm::connectionToggled(bool checked)

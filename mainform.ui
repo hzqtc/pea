@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>MainForm</class>
  <widget class="QMainWindow" name="MainForm">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>423</width>
+    <height>183</height>
+   </rect>
+  </property>
   <property name="windowTitle">
    <string>Pea - Disconnected</string>
   </property>
@@ -12,7 +20,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout_4">
     <item>
-     <widget class="QLabel" name="labelCover">
+     <widget class="QClickableLabel" name="labelCover">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
         <horstretch>0</horstretch>
@@ -30,6 +38,9 @@
         <width>125</width>
         <height>125</height>
        </size>
+      </property>
+      <property name="cursor">
+       <cursorShape>PointingHandCursor</cursorShape>
       </property>
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
@@ -231,6 +242,13 @@
    </layout>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QClickableLabel</class>
+   <extends>QLabel</extends>
+   <header>qclickablelabel.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="img.qrc"/>
  </resources>
