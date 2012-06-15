@@ -32,6 +32,7 @@ class MainForm: public QMainWindow
 
     protected:
         void closeEvent(QCloseEvent *event);
+        QSize sizeHint() const;
 
     private:
         QString presentTime(int seconds);

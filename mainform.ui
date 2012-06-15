@@ -2,12 +2,6 @@
 <ui version="4.0">
  <class>MainForm</class>
  <widget class="QMainWindow" name="MainForm">
-  <property name="sizePolicy">
-   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-    <horstretch>0</horstretch>
-    <verstretch>0</verstretch>
-   </sizepolicy>
-  </property>
   <property name="windowTitle">
    <string>Pea - Disconnected</string>
   </property>
@@ -39,9 +33,6 @@
       </property>
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="text">
-       <string/>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -99,6 +90,19 @@
          </widget>
         </item>
        </layout>
+      </item>
+      <item>
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
       </item>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">

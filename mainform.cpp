@@ -230,3 +230,8 @@ void MainForm::closeEvent(QCloseEvent *event)
     event->ignore();
     hide();
 }
+
+QSize MainForm::sizeHint() const
+{
+    return QSize(0, 0);
+}
