@@ -30,7 +30,7 @@ MainForm::MainForm(QWidget *parent): QMainWindow(parent)
 
     timer.start(1000);
 
-    tray.setIcon(this->windowIcon());
+    tray.setIcon(windowIcon());
     tray.setContextMenu(&menuTray);
     tray.show();
 
@@ -73,7 +73,7 @@ void MainForm::updateFmStatus()
 {
     if (!fm.isConnected()) {
         setWindowTitle("Pea - Disconnected");
-        tray.setToolTip(this->windowTitle());
+        tray.setToolTip(windowTitle());
         ui.buttonConnection->setChecked(false);
 
         resetFmStatus();
@@ -83,7 +83,7 @@ void MainForm::updateFmStatus()
     }
 
     setWindowTitle(QString("Pea - %1:%2").arg(fm.getRemoteAddr()).arg(fm.getRemotePort()));
-    tray.setToolTip(this->windowTitle());
+    tray.setToolTip(windowTitle());
     ui.buttonConnection->setChecked(true);
 
     switch (fm.getState()) {
@@ -152,11 +152,11 @@ void MainForm::displayCover(QNetworkReply *reply)
 void MainForm::trayActivated(QSystemTrayIcon::ActivationReason reason)
 {
     if (reason == QSystemTrayIcon::Trigger) {
-        if (this->isVisible()) {
-            this->hide();
+        if (isVisible()) {
+            hide();
         }
         else {
-            this->show();
+            show();
         }
     }
     else if(reason == QSystemTrayIcon::MiddleClick) {
@@ -228,5 +228,5 @@ void MainForm::fmBan()
 void MainForm::closeEvent(QCloseEvent *event)
 {
     event->ignore();
-    this->hide();
+    hide();
 }
