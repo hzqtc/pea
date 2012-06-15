@@ -2,14 +2,6 @@
 <ui version="4.0">
  <class>MainForm</class>
  <widget class="QMainWindow" name="MainForm">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>423</width>
-    <height>183</height>
-   </rect>
-  </property>
   <property name="windowTitle">
    <string>Pea - Disconnected</string>
   </property>
