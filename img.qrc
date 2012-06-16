@@ -1,7 +1,7 @@
 <RCC>
   <qresource>
+    <file>images/fm.png</file>
     <file>images/like.png</file>
-    <file>images/song.png</file>
     <file>images/liked.png</file>
     <file>images/pause.png</file>
     <file>images/link.png</file>

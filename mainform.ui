@@ -7,7 +7,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="img.qrc">
-    <normaloff>:/images/song.png</normaloff>:/images/song.png</iconset>
+    <normaloff>:/images/fm.png</normaloff>:/images/fm.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout_4">
