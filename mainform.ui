@@ -34,9 +34,6 @@
       <property name="cursor">
        <cursorShape>PointingHandCursor</cursorShape>
       </property>
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
-      </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
       </property>
