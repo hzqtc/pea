@@ -1,9 +1,10 @@
 #include "mainform.h"
 
-#include <qjson/parser.h>
-#include <QInputDialog>
 #include <QAction>
 #include <QDesktopServices>
+#include <QInputDialog>
+
+#include <qjson/parser.h>
 
 MainForm::MainForm(QWidget *parent): QMainWindow(parent)
 {

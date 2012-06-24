@@ -1,15 +1,15 @@
 #ifndef _PEA_MAINFORM_H_
 #define _PEA_MAINFORM_H_
 
-#include "ui_mainform.h"
 #include "fm.h"
+#include "ui_mainform.h"
 
+#include <QCloseEvent>
+#include <QMenu>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
-#include <QTimer>
 #include <QSystemTrayIcon>
-#include <QMenu>
-#include <QCloseEvent>
+#include <QTimer>
 
 class MainForm: public QMainWindow
 {

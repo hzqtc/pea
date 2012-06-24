@@ -9,6 +9,5 @@ int main(int argc, char *argv[])
     form.show();
     form.adjustSize();
     form.setMaximumHeight(form.height());
-    app.exec();
-    return 0;
+    return app.exec();
 }
