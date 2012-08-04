@@ -157,10 +157,12 @@ void MainForm::trayActivated(QSystemTrayIcon::ActivationReason reason)
 {
     if (reason == QSystemTrayIcon::Trigger) {
         if (isVisible()) {
+            geometry = saveGeometry();
             hide();
         }
         else {
             show();
+            restoreGeometry(geometry);
         }
     }
     else if(reason == QSystemTrayIcon::MiddleClick) {
@@ -236,8 +238,9 @@ void MainForm::fmBan()
 
 void MainForm::closeEvent(QCloseEvent *event)
 {
-    event->ignore();
+    geometry = saveGeometry();
     hide();
+    event->ignore();
 }
 
 QSize MainForm::sizeHint() const

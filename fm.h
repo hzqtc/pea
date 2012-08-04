@@ -45,7 +45,6 @@ class FM: public QObject
     private slots:
         void readServer();
 
-
     private:
         bool parse(QByteArray data);
 

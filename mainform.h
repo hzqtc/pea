@@ -46,6 +46,7 @@ class MainForm: public QMainWindow
         Ui::MainForm ui;
         QSystemTrayIcon tray;
         QMenu menuTray;
+        QByteArray geometry;
 
         QNetworkAccessManager coverDownloader;
         QString coverUrl;
